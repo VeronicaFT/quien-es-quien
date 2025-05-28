@@ -1,0 +1,68 @@
+<style>
+  :host {
+    --bright-blue: oklch(51.01% 0.274 263.83);
+    --electric-violet: oklch(53.18% 0.28 296.97);
+    --french-violet: oklch(47.66% 0.246 305.88);
+    --vivid-pink: oklch(69.02% 0.277 332.77);
+    --hot-red: oklch(61.42% 0.238 15.34);
+    --orange-red: oklch(63.32% 0.24 31.68);
+
+    --gray-900: oklch(19.37% 0.006 300.98);
+    --gray-700: oklch(36.98% 0.014 302.71);
+    --gray-400: oklch(70.9% 0.015 304.04);
+
+    --red-to-pink-to-purple-vertical-gradient: linear-gradient(
+      180deg,
+      var(--orange-red) 0%,
+      var(--vivid-pink) 50%,
+      var(--electric-violet) 100%
+    );
+
+    --red-to-pink-to-purple-horizontal-gradient: linear-gradient(
+      90deg,
+      var(--orange-red) 0%,
+      var(--vivid-pink) 50%,
+      var(--electric-violet) 100%
+    );
+
+    --pill-accent: var(--bright-blue);
+
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol";
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+</style>
+
+<main *ngIf="!gameStarted" class="main-menu">
+  <img src="assets/logo.png" alt="Logo Quién es Quién" class="logo" />
+  <button (click)="startGame()" class="start-btn">¡Empezar partida!</button>
+</main>
+
+<main *ngIf="gameStarted" class="game-area">
+  <section class="questions">
+    <h2>Preguntas</h2>
+    <button *ngFor="let q of questions" (click)="askQuestion(q)" [disabled]="q.asked">{{ q.text }}</button>
+  </section>
+  <section class="characters">
+    <h2>Personajes</h2>
+    <div class="grid">
+      <div *ngFor="let character of characters" class="character-card" [class.tachado]="character.eliminated">
+        <img [src]="character.img" [alt]="character.name" class="character-card-img" />
+        <div class="character-card-body">
+          <span class="character-card-title">{{ character.name }}</span>
+          <button class="character-card-btn" (click)="guessCharacter(character)" [disabled]="character.eliminated || gameEnded">¡Es este!</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section *ngIf="gameEnded" class="result">
+    <h2 *ngIf="win">¡Ganaste! 🎉</h2>
+    <h2 *ngIf="!win">Ups, sigue intentándolo.</h2>
+    <button (click)="restartGame()">Jugar de nuevo</button>
+  </section>
+</main>
+
+<router-outlet />
