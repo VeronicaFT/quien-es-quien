@@ -34,35 +34,194 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .section-title span {
+    margin-right: 0.5rem;
+  }
+
+  .toast-respuesta {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: var(--gray-900);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+
+  .toast-respuesta.show {
+    opacity: 1;
+  }
+
+  .toast-icon {
+    margin-right: 0.5rem;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-resultado {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+  }
+
+  .modal-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-btn {
+    background: var(--bright-blue);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+  }
+
+  .modal-btn:hover {
+    background: darken(var(--bright-blue), 10%);
+  }
+
+  .modal-win {
+    border: 2px solid green;
+  }
+
+  .modal-lose {
+    border: 2px solid red;
+  }
+
+  .instructions {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .instructions-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .instructions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .instructions-list li {
+    margin-bottom: 0.5rem;
+  }
+
+  .active {
+    background: var(--gray-700);
+    color: white;
+  }
+
+  .instructions-toggle {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .instructions-toggle:hover {
+    text-decoration: underline;
+  }
+
+  .instructions-toggle-text {
+    margin: 0 0.5rem;
+  }
 </style>
 
 <main *ngIf="!gameStarted" class="main-menu">
   <img src="assets/logo.png" alt="Logo Quién es Quién" class="logo" />
+  <button class="instructions-toggle" (click)="showInstructions = !showInstructions">
+    <span class="instructions-icon">ℹ️</span>
+    <span class="instructions-toggle-text">¿Cómo se juega?</span>
+    <span class="instructions-arrow">{{ showInstructions ? '▲' : '▼' }}</span>
+  </button>
+  <div class="instructions" *ngIf="showInstructions">
+    <ul class="instructions-list">
+      <li>Haz clic en una <b>pregunta</b> para recibir respuesta <b>Sí</b> o <b>No</b>.</li>
+      <li>Elimina personajes haciendo clic en su tarjeta. Puedes volver a activarlos si te equivocas.</li>
+      <li>Cuando creas saber quién es, pulsa <b>¡Es este!</b> en la tarjeta correspondiente.</li>
+      <li>¡Gana si aciertas! Puedes jugar de nuevo todas las veces que quieras.</li>
+    </ul>
+  </div>
   <button (click)="startGame()" class="start-btn">¡Empezar partida!</button>
 </main>
 
 <main *ngIf="gameStarted" class="game-area">
   <section class="questions">
-    <h2>Preguntas</h2>
-    <button *ngFor="let q of questions" (click)="askQuestion(q)" [disabled]="q.asked">{{ q.text }}</button>
+    <h2 class="section-title"><span>❓</span> Preguntas</h2>
+    <button *ngFor="let q of questions; let i = index" (click)="askQuestion(q); activeQuestion = i" [disabled]="q.asked" [ngClass]="{'active': activeQuestion === i && !q.asked}">{{ q.text }}</button>
+    <div *ngIf="respuestaPregunta !== null" class="toast-respuesta show" [ngClass]="{'toast-si': respuestaPregunta === 'Sí', 'toast-no': respuestaPregunta === 'No'}">
+      <span class="toast-icon">{{ respuestaPregunta === 'Sí' ? '✔️' : '❌' }}</span>
+      <span class="toast-question" *ngIf="preguntaToast">{{ preguntaToast }}</span>
+      <span class="toast-text">{{ respuestaPregunta }}</span>
+    </div>
   </section>
   <section class="characters">
-    <h2>Personajes</h2>
+    <h2 class="section-title"><span>🧑‍🎤</span> Personajes</h2>
     <div class="grid">
-      <div *ngFor="let character of characters" class="character-card" [class.tachado]="character.eliminated">
+      <div *ngFor="let character of characters" class="character-card" [class.tachado]="character.eliminated" (click)="toggleEliminated(character)">
         <img [src]="character.img" [alt]="character.name" class="character-card-img" />
         <div class="character-card-body">
           <span class="character-card-title">{{ character.name }}</span>
-          <button class="character-card-btn" (click)="guessCharacter(character)" [disabled]="character.eliminated || gameEnded">¡Es este!</button>
+          <button class="character-card-btn" (click)="guessCharacter(character); $event.stopPropagation()" [disabled]="gameEnded">¡Es este!</button>
         </div>
       </div>
     </div>
   </section>
-  <section *ngIf="gameEnded" class="result">
-    <h2 *ngIf="win">¡Ganaste! 🎉</h2>
-    <h2 *ngIf="!win">Ups, sigue intentándolo.</h2>
-    <button (click)="restartGame()">Jugar de nuevo</button>
-  </section>
+  <div *ngIf="gameEnded" class="modal-overlay">
+    <div class="modal-resultado" [ngClass]="{'modal-win': win, 'modal-lose': !win}">
+      <div class="modal-icon">{{ win ? '🎉' : '😢' }}</div>
+      <h2 class="modal-title">{{ win ? '¡Ganaste!' : 'Ups, sigue intentándolo.' }}</h2>
+      <button class="modal-btn" (click)="restartGame()">Jugar de nuevo</button>
+    </div>
+  </div>
 </main>
 
 <router-outlet />

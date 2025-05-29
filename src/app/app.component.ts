@@ -24,6 +24,10 @@ export class AppComponent {
   gameStarted = false;
   gameEnded = false;
   win = false;
+  respuestaPregunta: string | null = null;
+  preguntaToast: string | null = null;
+  activeQuestion: number | null = null;
+  showInstructions = false;
 
   questions = [
     { text: '¿Tiene gafas?', key: 'glasses', asked: false },
@@ -81,25 +85,14 @@ export class AppComponent {
     } else {
       answer = false;
     }
-    this.characters.forEach(c => {
-      let match: boolean;
-      if (q.key === 'hairColor') {
-        match = c.hairColor === q.value;
-      } else if (q.key === 'bald') {
-        match = !!c.bald;
-      } else if (q.key === 'glasses') {
-        match = c.glasses;
-      } else if (q.key === 'longHair') {
-        match = c.longHair;
-      } else if (q.key === 'beard') {
-        match = c.beard;
-      } else if (q.key === 'mustache') {
-        match = c.mustache;
-      } else {
-        match = false;
-      }
-      if (match !== answer) c.eliminated = true;
-    });
+    this.respuestaPregunta = answer ? 'Sí' : 'No';
+    this.preguntaToast = q.text;
+    this.activeQuestion = this.questions.findIndex(qq => qq === q);
+    // Ya no se elimina ningún personaje automáticamente
+  }
+
+  toggleEliminated(character: Character) {
+    character.eliminated = !character.eliminated;
   }
 
   guessCharacter(character: Character) {
@@ -111,5 +104,6 @@ export class AppComponent {
     this.gameStarted = false;
     this.gameEnded = false;
     this.win = false;
+    this.activeQuestion = null;
   }
 }
