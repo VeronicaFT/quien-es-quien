@@ -1,59 +1,84 @@
-# QuienEsQuien
+# Quién es Quién 👤❓
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.4.
+Adaptación web del clásico juego de mesa “¿Quién es quién?”, desarrollada con Angular.  
+El usuario debe adivinar el personaje correcto a partir de sus características, poniendo en práctica la lógica y la observación.
 
-## Development server
+Proyecto realizado como práctica de Angular durante mis estudios de Desarrollo de Aplicaciones Web.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## 🎮 ¿En qué consiste el juego?
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- El juego muestra un conjunto de personajes con distintos rasgos (por ejemplo: pelo, accesorios, etc.).
+- El sistema selecciona un personaje secreto.
+- El usuario puede ir filtrando o consultando características hasta quedarse con la opción correcta.
+- El objetivo es acertar el personaje con el menor número de intentos posible.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🛠️ Tecnologías utilizadas
 
-```bash
-ng generate component component-name
-```
+- Angular (versión 19.x)
+- TypeScript
+- HTML5
+- SCSS
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## 📦 Requisitos previos
 
-## Building
+Antes de ejecutar el proyecto, instala:
 
-To build the project run:
+- Node.js
+- Angular CLI
 
-```bash
-ng build
-```
+Instalar Angular CLI:
+npm install -g @angular/cli
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## 🚀 Puesta en marcha del proyecto
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+1. Clonar el repositorio:
+   git clone https://github.com/VeronicaFT/quien-es-quien.git  
+   cd quien-es-quien
 
-```bash
-ng test
-```
+2. Instalar dependencias:
+   npm install
 
-## Running end-to-end tests
+3. Iniciar el servidor de desarrollo:
+   ng serve
 
-For end-to-end (e2e) testing, run:
+4. Abrir en el navegador:
+   http://localhost:4200/
 
-```bash
-ng e2e
-```
+---
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 🧩 Estructura básica del proyecto
 
-## Additional Resources
+- src/app/ → Componentes principales y lógica del juego
+- src/assets/ → Imágenes y recursos
+- angular.json → Configuración del proyecto
+- package.json → Dependencias y scripts
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+## 📈 Mejoras futuras
+
+- Contador de intentos
+- Historial de partidas
+- Niveles de dificultad
+- Nuevas temáticas de personajes
+- Sonidos y animaciones
+- Modo dos jugadores
+
+---
+
+## 👩‍💻 Autora
+
+Verónica Flores Torralva  
+Desarrolladora Web Junior
+
+LinkedIn: https://www.linkedin.com/in/veronicaflorestorralva/  
+GitHub: https://github.com/VeronicaFT
+
