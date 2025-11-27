@@ -82,3 +82,8 @@ Desarrolladora Web Junior
 LinkedIn: https://www.linkedin.com/in/veronicaflorestorralva/  
 GitHub: https://github.com/VeronicaFT
 
+## Licencia
+Este proyecto está bajo la licencia **MIT**.  
+Puedes consultar los detalles en el archivo [LICENSE](./LICENSE).
+
+
